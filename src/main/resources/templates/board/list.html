@@ -43,6 +43,22 @@
     </tbody>
 </table>
 
+<!-- 페이징 -->
+<div>
+    <span th:each="pageNum : ${pageList}" th:inline="text">
+        <a th:href="@{'/?page=' + ${pageNum}}">[[${pageNum}]]</a>
+    </span>
+</div>
+
+
+<!-- 검색 form -->
+<form action="/board/search" method="get">
+    <div>
+        <input name="keyword" type="text" placeholder="검색어를 입력해주세요" />
+    </div>
+    <button>Search</button>
+</form>
+
 <!--FOOTER-->
 <div th:insert="common/footer.html" id="footer"></div>
 

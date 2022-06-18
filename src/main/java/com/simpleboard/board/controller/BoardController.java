@@ -17,13 +17,37 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    //== 게시글 목록 ==//
+    /**
+     * 게시글 목록
+     * @param model
+     * @return
+     */
     @GetMapping("/")
-    public String list(Model model) {
-        List<BoardDto> boardList = boardService.getBoardList();
+    public String list(Model model,
+                       @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+
+        List<BoardDto> boardList = boardService.getBoardList(pageNum);
+        Integer[] pageList = boardService.getPageList(pageNum);
+
         model.addAttribute("boardList", boardList);
+        model.addAttribute("pageList", pageList);
         return "board/list";
     }
+
+    /**
+     * 검색
+     * @param keyword
+     * @param model
+     * @return
+     */
+    @GetMapping("/board/search")
+    public String search(@RequestParam(value = "keyword") String keyword, Model model) {
+        List<BoardDto> boardDtoList = boardService.searchPosts(keyword);
+        model.addAttribute("boardList", boardDtoList);
+        return "board/list";
+    }
+
+
 
     @GetMapping("/post")
     public String writeForm() {
@@ -67,4 +91,5 @@ public class BoardController {
 
         return "redirect:/";
     }
+
 }
