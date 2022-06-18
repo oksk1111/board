@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+
+<form th:action="@{'/post/edit/' + ${boardDto.id}}" method="post">
+    <!-- 굳이 put 으로 바꿀 필요 있을까? -> RESTFul API 규칙을 위해 더 나은 방식 -->
+    <input type="hidden" name="_method" value="put" />
+    <input type="hidden" name="id" th:value="${boardDto.id}" />
+
+    Title: <input type="text" name="title" th:value="${boardDto.title}"> <br>
+    Writer: <input type="text" name="writer" th:value="${boardDto.writer}"> <br>
+    <textarea name="content" th:text="${boardDto.content}"></textarea> <br>
+
+    <input type="submit" value="수정">
+</form>
 
 </body>
 </html>

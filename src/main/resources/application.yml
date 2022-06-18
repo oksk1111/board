@@ -15,7 +15,11 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create  #none
+      ddl-auto: none  #create, none
+
+  # html form의 put, delete 사용을 위해 HiddenMethodFilter(from spring #2.2) 설정이 필요함
+  mvc:
+    hiddenmethod.filter.enabled: true
 
 #logging:
 #  level:
