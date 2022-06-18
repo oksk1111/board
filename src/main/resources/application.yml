@@ -1,21 +1,30 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/board?serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: 1234
+    url: jdbc:h2:tcp://localhost/~/board
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+#mysql 연결이 잘안되어 일단 h2로 한다
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/board?serverTimezone=UTC&characterEncoding=UTF-8
+#    username: root
+#    password: alstjsrl
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ddl-auto: create  #none
+
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type.descriptor.sql.BasicBinder: TRACE
 
 logging:
   level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
