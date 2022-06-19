@@ -1,34 +1,24 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/board
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-#mysql 연결이 잘안되어 일단 h2로 한다
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/board?serverTimezone=UTC&characterEncoding=UTF-8
-#    username: root
-#    password: alstjsrl
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://sunkimindb-1.c3i7akqx3zi2.ap-northeast-2.rds.amazonaws.com:3306/board?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: alstjsrl8485
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: none  #create, none
-
-  # html form의 put, delete 사용을 위해 HiddenMethodFilter(from spring #2.2) 설정이 필요함
-  mvc:
-    hiddenmethod.filter.enabled: true
-
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        SQL: DEBUG
-#        type.descriptor.sql.BasicBinder: TRACE
+      ddl-auto: create
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
