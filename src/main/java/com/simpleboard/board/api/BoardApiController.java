@@ -39,6 +39,13 @@ public class BoardApiController {
         return new CreateBoardResponse(id);
     }
 
+
+    @GetMapping("/board/{id}")
+    public BoardDto detail(@PathVariable("id") Long id) {
+        return boardService.getPost(id);
+    }
+
+
     @Data
     static class CreateBoardResponse {
         private Long id;
@@ -47,4 +54,5 @@ public class BoardApiController {
             this.id = id;
         }
     }
+
 }

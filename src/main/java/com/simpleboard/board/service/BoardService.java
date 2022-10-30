@@ -62,8 +62,8 @@ public class BoardService {
         return boardRepository.count();
     }
 
-    public BoardDto getPost(Long id) {
-        Optional<BoardEntity> boardEntityWrapper = boardRepository.findById(id);
+    public BoardDto getPost(Long no) {
+        Optional<BoardEntity> boardEntityWrapper = boardRepository.findById(no);
         BoardEntity boardEntity = boardEntityWrapper.get();
         return convertEntityToDto(boardEntityWrapper.get());
     }
@@ -91,9 +91,10 @@ public class BoardService {
         return BoardDto.builder()
                 .id(boardEntity.getId())
                 .title(boardEntity.getTitle())
-                .content(boardEntity.getTitle())
+                .content(boardEntity.getContent())
                 .writer(boardEntity.getWriter())
                 .createdDate(boardEntity.getCreatedDate())
+                .modifiedDate(boardEntity.getModifiedDate())
                 .build();
     }
 
