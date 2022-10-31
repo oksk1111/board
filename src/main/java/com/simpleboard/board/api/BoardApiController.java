@@ -6,9 +6,6 @@ import com.simpleboard.board.service.BoardService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardApiController {
 
     private final BoardService boardService;
@@ -44,6 +42,20 @@ public class BoardApiController {
     public BoardDto detail(@PathVariable("id") Long id) {
         return boardService.getPost(id);
     }
+
+
+    @PutMapping("/post/edit/{id}")
+    public CreateBoardResponse update(@PathVariable("id") Long id, @RequestBody @Valid BoardDto boardDto) {
+        boardService.savePost(boardDto);
+        return new CreateBoardResponse(id);
+    }
+
+
+    @DeleteMapping("/post/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        boardService.deletePost(id);
+    }
+
 
 
     @Data

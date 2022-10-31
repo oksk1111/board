@@ -30,6 +30,22 @@ public class BoardService {
         return boardRepository.save(boardDto.toEntity()).getId();   //MVC계층간 Entity를 직접 운용하지 않고 DTO를 이용
     }
 
+
+    @Transactional
+    public BoardDto updatePost(Long id, BoardDto updatedBoard) {
+        BoardDto boardDto = getPost(id);
+
+        boardDto.setWriter(updatedBoard.getWriter());
+        boardDto.setTitle(updatedBoard.getTitle());
+        boardDto.setContent(updatedBoard.getContent());
+
+        boardRepository.save(boardDto.toEntity()).getId();
+
+
+        return boardDto;
+    }
+
+
     public List<BoardDto> getBoardList() {
         List<BoardEntity> boardEntities = boardRepository.findAll();
         List<BoardDto> boardDtoList = new ArrayList<>();
@@ -65,7 +81,17 @@ public class BoardService {
     public BoardDto getPost(Long no) {
         Optional<BoardEntity> boardEntityWrapper = boardRepository.findById(no);
         BoardEntity boardEntity = boardEntityWrapper.get();
-        return convertEntityToDto(boardEntityWrapper.get());
+
+        BoardDto boardDTO = BoardDto.builder()
+                .id(boardEntity.getId())
+                .title(boardEntity.getTitle())
+                .content(boardEntity.getContent())
+                .writer(boardEntity.getWriter())
+                .createdDate(boardEntity.getCreatedDate())
+                .modifiedDate(boardEntity.getModifiedDate())
+                .build();
+
+        return boardDTO;
     }
 
     @Transactional

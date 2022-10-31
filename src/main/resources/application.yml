@@ -12,6 +12,11 @@ spring:
       hibernate:
         format_sql: true
 
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
 logging:
   level:
     org:

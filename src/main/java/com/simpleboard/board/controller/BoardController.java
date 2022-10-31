@@ -71,7 +71,7 @@ public class BoardController {
 
     //== 게시글 수정 ==//
     @GetMapping("/post/edit/{no}")
-    public String updateForm(@PathVariable("no") Long no, Model model) {
+    public String edit(@PathVariable("no") Long no, Model model) {
         BoardDto boardDto = boardService.getPost(no);
         model.addAttribute("boardDto", boardDto);
         return "board/update";
@@ -79,6 +79,7 @@ public class BoardController {
 
     @PutMapping("/post/edit/{no}")
     public String update(BoardDto boardDto) {
+        log.info("@@@@@ update: " + boardDto);
         boardService.savePost(boardDto);
 
         return "redirect:/";
