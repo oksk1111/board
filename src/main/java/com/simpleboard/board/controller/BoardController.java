@@ -22,17 +22,17 @@ public class BoardController {
      * @param model
      * @return
      */
-    @GetMapping("/")
-    public String list(Model model,
-                       @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
-
-        List<BoardDto> boardList = boardService.getBoardList(pageNum);
-        Integer[] pageList = boardService.getPageList(pageNum);
-
-        model.addAttribute("boardList", boardList);
-        model.addAttribute("pageList", pageList);
-        return "board/list";
-    }
+//    @GetMapping("/")
+//    public String list(Model model,
+//                       @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+//
+//        List<BoardDto> boardList = boardService.getBoardList(pageNum);
+//        Integer[] pageList = boardService.getPageList(pageNum);
+//
+//        model.addAttribute("boardList", boardList);
+//        model.addAttribute("pageList", pageList);
+//        return "board/list";
+//    }
 
     /**
      * 검색

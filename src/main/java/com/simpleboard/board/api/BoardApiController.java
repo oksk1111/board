@@ -6,10 +6,12 @@ import com.simpleboard.board.service.BoardService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -25,9 +27,14 @@ public class BoardApiController {
      * @param
      * @return
      */
+//    @GetMapping("/board/all")
+//    public List<BoardDto> getBoardList() {
+//        return boardService.getBoardList();
+//    }
+
     @GetMapping("/board")
-    public List<BoardDto> getBoardList() {
-        return boardService.getBoardList();
+    public ResponseEntity<Map> getBoardList(@RequestParam(value="p_num", required=false, defaultValue="1") Integer pageNum) {
+        return boardService.getBoardList(pageNum);
     }
 
 

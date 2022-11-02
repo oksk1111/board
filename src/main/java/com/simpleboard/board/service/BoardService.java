@@ -3,21 +3,23 @@ package com.simpleboard.board.service;
 import com.simpleboard.board.domain.BoardEntity;
 import com.simpleboard.board.dto.BoardDto;
 import com.simpleboard.board.repository.BoardRepository;
+import com.simpleboard.board.util.PagingUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -58,12 +60,40 @@ public class BoardService {
         return boardDtoList;
     }
 
-    public List<BoardDto> getBoardList(Integer pageNum) {
+
+    public ResponseEntity<Map> getBoardList(Integer pageNum) {
+
+//        Page<BoardEntity> page = boardRepository.findAll(PageRequest.of(
+//                pageNum - 1,
+//                PAGE_POST_COUNT,
+//                Sort.by(Sort.Direction.ASC, "createdDate")));
+//
+//        List<BoardEntity> boardEntities = page.getContent();
+//        List<BoardDto> boardDtoList = new ArrayList<>();
+//
+//        for (BoardEntity boardEntity : boardEntities)
+//            boardDtoList.add(convertEntityToDto(boardEntity));
+//
+//        return boardDtoList;
+
+        Map result = null;
+        PagingUtil pu = new PagingUtil(pageNum, 5, 5);
 
         Page<BoardEntity> page = boardRepository.findAll(PageRequest.of(
                 pageNum - 1,
-                PAGE_POST_COUNT,
+                (int) pu.getObjectCountPerPage(),
                 Sort.by(Sort.Direction.ASC, "createdDate")));
+
+        pu.setObjectCountTotal((int) boardRepository.count());
+        pu.setCalcForPaging();
+
+        log.info("@@ pageNum: " + pageNum);
+        log.info("@@ " + pu.toString());
+        log.info("@@ TotalPages: " + page.getTotalPages());
+
+        if (page == null || page.getTotalPages() == 0) {
+            return null;
+        }
 
         List<BoardEntity> boardEntities = page.getContent();
         List<BoardDto> boardDtoList = new ArrayList<>();
@@ -71,12 +101,18 @@ public class BoardService {
         for (BoardEntity boardEntity : boardEntities)
             boardDtoList.add(convertEntityToDto(boardEntity));
 
-        return boardDtoList;
+        result = new HashMap<>();
+        result.put("pagingData", pu);
+        result.put("list", boardDtoList);
+
+        return ResponseEntity.ok(result);
     }
+
 
     public Long getBoardCount() {
         return boardRepository.count();
     }
+
 
     public BoardDto getPost(Long no) {
         Optional<BoardEntity> boardEntityWrapper = boardRepository.findById(no);
@@ -94,10 +130,12 @@ public class BoardService {
         return boardDTO;
     }
 
+
     @Transactional
     public void deletePost(Long id) {
         boardRepository.deleteById(id);
     }
+
 
     public List<BoardDto> searchPosts(String keyword) {
         List<BoardEntity> boardEntities = boardRepository.findByTitleContaining(keyword);
@@ -113,6 +151,7 @@ public class BoardService {
         return boardDtoList;
     }
 
+
     private BoardDto convertEntityToDto(BoardEntity boardEntity) {
         return BoardDto.builder()
                 .id(boardEntity.getId())
@@ -123,6 +162,7 @@ public class BoardService {
                 .modifiedDate(boardEntity.getModifiedDate())
                 .build();
     }
+
 
     public Integer[] getPageList(Integer curPageNum) {
 
